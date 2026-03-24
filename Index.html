@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FashionVista - Modern Fashion Collection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            flex: 1;
+            margin: 0 2rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .search-box:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            transition: 0.3s;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 2rem 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Pinterest Grid */
+        .grid-container {
+            column-count: 1;
+            column-gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        @media (min-width: 768px) {
+            .grid-container {
+                column-count: 2;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .grid-container {
+                column-count: 3;
+                column-gap: 2.5rem;
+            }
+        }
+
+        .fashion-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            break-inside: avoid;
+            position: relative;
+        }
+
+        .fashion-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .fashion-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .fashion-card:hover .fashion-image {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        .card-price {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .shop-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .shop-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .social-link:hover {
+            background: #667eea;
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .search-container {
+                margin: 0;
+                order: -1;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .grid-container {
+                column-gap: 1rem;
+                padding: 0 0.5rem;
+            }
+
+            .main-container {
+                padding: 80px 1rem 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">FashionVista</div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-box" placeholder="Search outfits, hijab, shirts..." id="searchInput">
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="hero-section">
+            <h1 class="hero-title">Discover Your Style</h1>
+            <p style="font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto;">
+                Explore the latest fashion trends in hijab, outfits, shirts and more
+            </p>
+        </div>
+
+        <div class="grid-container" id="gridContainer">
+            <!-- Fashion cards will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+        </div>
+        <p>&copy; 2024 FashionVista. All rights reserved. | Made with ❤️ for fashion lovers</p>
+    </footer>
+
+    <script>
+        // Fashion items data
+        const fashionItems = [
+            { id: 1, title: "Elegant Hijab Set", price: "$59.99", img: "https://images.unsplash.com/photo-1595777450992-b3879b4f3d75?w=400&h=500&fit=crop", category: "hijab" },
+            { id: 2, title: "Modern Blouse", price: "$39.99", img: "https://images.unsplash.com/photo-1483985988355-763728e01a71?w=400&h=500&fit=crop", category: "shirts" },
+            { id: 3, title: "Chic Palazzo Pants", price: "$49.99", img: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&h=500&fit=crop", category: "pants" },
+            { id: 4, title: "Summer Maxi Dress", price: "$69.99", img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=500&fit=crop", category: "outfits" },
+            { id: 5, title: "Silk Hijab", price: "$29.99", img: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=400&h=500&fit=crop", category: "hijab" },
+            { id: 6, title: "Oversized Shirt", price: "$45.99", img: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=400&h=500&fit=crop", category: "shirts" },
+            { id: 7, title: "Wide Leg Pants", price: "$55.99", img: "https://images.unsplash.com/photo-1598033124237-ceaecf81a8df?w=400&h=500&fit=crop", category: "pants" },
+            { id: 8, title: "Floral Hijab Dress", price: "$79.99", img: "https://images.unsplash.com/photo-1621345807825-36ddc5c7a341?w=400&h=500&fit=crop", category: "hijab" },
+            { id: 9, title: "Casual Outfit", price: "$65.99", img: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=500&fit=crop", category: "outfits" },
+            { id: 10, title: "Linen Shirt", price: "$42.99", img: "https://images.unsplash.com/photo-1588747475927-49c8d6a51d68?w=400&h=500&fit=crop", category: "shirts" },
+            { id: 11, title: "Tailored Pants", price: "$59.99", img: "https://images.unsplash.com/photo-1602293589930-58d141b96450?w=400&h=500&fit=crop", category: "pants" },
+            { id: 12, title: "Evening Hijab Look", price: "$89.99", img: "https://images.unsplash.com/photo-1610400325479-299efce9badb?w=400&h=500&fit=crop", category: "hijab" }
+        ];
+
+        // DOM Elements
+        const gridContainer = document.getElementById('gridContainer');
+        const searchInput = document.getElementById('searchInput');
+        const navMenu = document.getElementById('navMenu');
+        const hamburger = document.getElementById('hamburger');
+
+        // Initialize
+        function init() {
+            renderFashionItems(fashionItems);
+            setupEventListeners();
+        }
+
+        // Render fashion items
+        function renderFashionItems(items) {
+            gridContainer.innerHTML = '';
+            items.forEach(item => {
+                const card = createFashionCard(item);
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // Create fashion card element
+        function createFashionCard(item) {
+            const card = document.createElement('div');
+            card.className = 'fashion-card';
+            card.innerHTML = `
+                <img src="${item.img}" alt="${item.title}" class="fashion-image" loading="lazy">
+                <div class="card-content">
+                    <h3 class="card-title">${item.title}</h3>
+                    <div class="card-price">${item.price}</div>
+                    <button class="shop-btn" onclick="addToCart(${item.id})">
+                        <span>Shop Now</span>
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Search functionality
+        function setupEventListeners() {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filteredItems = fashionItems.filter(item => 
+                    item.title.toLowerCase().includes(query) || 
+                    item.category.toLowerCase().includes(query)
+                );
+                renderFashionItems(filteredItems);
+            });
+
+            // Mobile menu toggle
+            hamburger.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+
+            // Smooth scrolling for nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navMenu.classList.remove('active');
+                });
+            });
+        }
+
+        // Add to cart simulation
+        function addToCart(id) {
+            const item = fashionItems.find(i => i.id === id);
+            // Simulate adding to cart
+            const btn = event.target.closest('.shop-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading"></span> Adding...';
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+                alert(`"${item.title}" added to cart! 🎉`);
+            }, 1500);
+        }
+
+        // Smooth scroll effect for navbar
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 4px 32px rgba(0,0,0,0.15)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            }
+        });
+
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>
